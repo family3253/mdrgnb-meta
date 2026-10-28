@@ -1,0 +1,6 @@
+*.csv
+*.rds
+*.RData
+results/
+data/
+*.log
