@@ -1,16 +1,10 @@
-# De-identified examples for aggregate prediction-model meta-analysis.
-# No patient-level records, source labels, local paths, or study identifiers
-# are embedded in this file.
-
+# Packages
 suppressPackageStartupMessages({
   library(metafor)
   library(clubSandwich)
 })
 
-# Expected input columns:
-#   auc, ci_lower, ci_upper, report_key, cluster_key
-# Keep the input CSV outside the repository.
-
+# Effect-size preparation
 logit_auc <- function(x) qlogis(x)
 
 logit_se_from_ci <- function(ci_lower, ci_upper, level = 0.95) {
@@ -59,8 +53,7 @@ fit_cluster_robust_model <- function(dat) {
   list(model = fit, robust_test = robust, pooled_auc = pooled)
 }
 
-# Sensitivity pattern: one summary per report. This gives each report one
-# summary value, while the REML model still uses the supplied working variance.
+# Report-level sensitivity
 make_report_level_summaries <- function(dat) {
   dat <- prepare_effects(dat)
   split_dat <- split(dat, dat$report_key)
